@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestore Background Roleplay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #3a4e7a;
+            --secondary-color: #6883bc;
+            --accent-color: #f2b138;
+            --light-color: #f1f2f6;
+            --dark-color: #2d2e2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 50px;
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .search-container:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            border-radius: 50px;
+        }
+
+        .search-icon {
+            padding: 0.5rem 1rem 0.5rem 0.6rem;
+            color: var(--dark-color);
+            background-color: white;
+        }
+
+        .main-content {
+            margin: 2rem 0;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .actions {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .add-btn {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background-color: #e6a730;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .backgrounds-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .background-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .background-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.2rem;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .card-body {
+            padding: 1.2rem;
+        }
+
+        .card-section {
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 1.2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .card-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .card-btn:hover {
+            color: var(--accent-color);
+            background-color: rgba(242, 177, 56, 0.1);
+        }
+
+        .view-btn {
+            color: var(--primary-color);
+        }
+
+        .view-btn:hover {
+            color: var(--secondary-color);
+            background-color: rgba(106, 131, 188, 0.1);
+        }
+
+        .remove-btn {
+            color: #e74c3c;
+        }
+
+        .remove-btn:hover {
+            color: #c0392b;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1.2rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(106, 131, 188, 0.2);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+            background-color: white;
+            z-index: 10;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            background-color: #e6a730;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .empty-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.2rem;
+            color: #ccc;
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .empty-text {
+            margin-bottom: 1.8rem;
+        }
+
+        /* Dettagli Modal */
+        .details-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .details-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .details-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+
+        .details-modal.active .details-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .details-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .details-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .details-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .details-body {
+            padding: 1.5rem;
+        }
+
+        .details-section {
+            margin-bottom: 1.8rem;
+            animation: fadeInUp 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .details-section:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .details-section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .details-section:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .details-section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .details-content p {
+            margin-bottom: 1rem;
+        }
+
+        .details-footer {
+            padding: 1.2rem 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            position: sticky;
+            bottom: 0;
+            background-color: white;
+            z-index: 10;
+        }
+
+        .close-details-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-details-btn:hover {
+            background-color: #2a3a58;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .details-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            padding: 0.7rem 1.2rem;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-item i {
+            color: var(--primary-color);
+        }
+
+        /* Animazioni */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .backgrounds-list {
+                grid-template-columns: 1fr;
+            }
+        }
+</style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="site-title">Gestore Background Roleplay</div>
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Cerca per nome player o personaggio...">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div id="backgroundsList" class="backgrounds-list">
+                <!-- I background verranno inseriti qui dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per visualizzare i dettagli -->
+    <div id="detailsModal" class="details-modal">
+        <div class="details-content">
+            <div class="details-header">
+                <div>
+                    <div class="details-title" id="detailsName"></div>
+                    <div class="details-subtitle" id="detailsPlayer"></div>
+                </div>
+                <button class="close-btn" id="closeDetailsBtn">&times;</button>
+            </div>
+            <div class="details-body">
+                <div class="details-info">
+                    <div class="info-item"><span>👤</span> <span id="detailsAge"></span> anni</div>
+                    <div class="info-item"><span>📍</span> <span id="detailsBirthplace"></span></div>
+                    <div class="info-item"><span>💬</span> <span id="detailsDiscord"></span></div>
+                </div>
+                
+                <div class="details-section">
+                    <div class="details-section-title">Esperienza Roleplay</div>
+                    <p id="detailsExperience"></p>
+                </div>
+                
+                <div class="details-section">
+                    <div class="details-section-title">Storia e Motivazione</div>
+                    <p><strong>Background:</strong></p>
+                    <p id="detailsBackground"></p>
+                    <p><strong>Motivazione:</strong></p>
+                    <p id="detailsMotivation"></p>
+                </div>
+                
+                <div class="details-section">
+                    <div class="details-section-title">Personalità</div>
+                    <p><strong>Carattere:</strong></p>
+                    <p id="detailsPersonality"></p>
+                    <p><strong>Punti di Forza:</strong></p>
+                    <p id="detailsStrengths"></p>
+                    <p><strong>Debolezze:</strong></p>
+                    <p id="detailsWeaknesses"></p>
+                </div>
+            </div>
+            <div class="details-footer">
+                <button id="closeDetailsBtnFooter" class="close-details-btn">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestione dello stato dell'applicazione
+        let backgrounds = [];
+
+        // Elementi DOM
+        const backgroundsList = document.getElementById('backgroundsList');
+        const searchInput = document.getElementById('searchInput');
+        const detailsModal = document.getElementById('detailsModal');
+        const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+        const closeDetailsBtnFooter = document.getElementById('closeDetailsBtnFooter');
+
+        // Carica i background dalla cartella data
+        async function loadBackgrounds() {
+            try {
+                // Ottieni la lista dei file dalla cartella data
+                const response = await fetch('/data/');
+                
+                if (!response.ok) {
+                    throw new Error('Impossibile accedere alla cartella data');
+                }
+                
+                const files = await response.json();
+                const jsonFiles = files.filter(file => file.endsWith('.json'));
+                
+                // Carica ogni file JSON
+                const backgroundsData = await Promise.all(
+                    jsonFiles.map(async (filename) => {
+                        const fileResponse = await fetch(`/data/${filename}`);
+                        if (!fileResponse.ok) {
+                            console.error(`Errore nel caricare ${filename}`);
+                            return null;
+                        }
+                        return await fileResponse.json();
+                    })
+                );
+                
+                // Filtra eventuali errori e imposta i backgrounds
+                backgrounds = backgroundsData.filter(bg => bg !== null);
+                renderBackgrounds();
+            } catch (error) {
+                console.error('Errore nel caricamento dei backgrounds:', error);
+                showErrorMessage('Non è stato possibile caricare i backgrounds. Verifica che la cartella "data" esista e contenga file JSON validi.');
+            }
+        }
+
+        // Mostra un messaggio di errore
+        function showErrorMessage(message) {
+            backgroundsList.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⚠️</div>
+                    <h2 class="empty-title">Errore</h2>
+                    <p class="empty-text">${message}</p>
+                </div>
+            `;
+        }
+
+        // Renderizza tutti i background
+        function renderBackgrounds(items = backgrounds) {
+            backgroundsList.innerHTML = '';
+
+            if (items.length === 0) {
+                backgroundsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <h2 class="empty-title">Nessun background trovato</h2>
+                        <p class="empty-text">Aggiungi file JSON nella cartella "data" per visualizzare i backgrounds.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            items.forEach((bg, index) => {
+                const card = document.createElement('div');
+                card.className = 'background-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${bg.characterName}</div>
+                        <div class="card-subtitle">Player: ${bg.playerName}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-section">
+                            <div class="section-title">Personaggio</div>
+                            <p>Età: ${bg.characterAge} anni</p>
+                            <p>Luogo di nascita: ${bg.birthplace}</p>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-btn view-btn" data-id="${bg.id}">
+                            <span>👁️</span> Visualizza Dettagli
+                        </button>
+                    </div>
+                `;
+                backgroundsList.appendChild(card);
+            });
+
+            // Aggiungi event listener ai pulsanti
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', openDetails);
+            });
+        }
+
+        // Apertura del modal dei dettagli
+        function openDetails(e) {
+            const id = e.currentTarget.getAttribute('data-id');
+            const bg = backgrounds.find(item => item.id === id);
+            
+            if (bg) {
+                // Popola i dati nel modal
+                document.getElementById('detailsName').textContent = bg.characterName;
+                document.getElementById('detailsPlayer').textContent = `Player: ${bg.playerName}`;
+                document.getElementById('detailsAge').textContent = bg.characterAge;
+                document.getElementById('detailsBirthplace').textContent = bg.birthplace;
+                document.getElementById('detailsDiscord').textContent = bg.discordTag;
+                document.getElementById('detailsExperience').textContent = bg.rpExperience;
+                document.getElementById('detailsBackground').textContent = bg.background;
+                document.getElementById('detailsMotivation').textContent = bg.motivation;
+                document.getElementById('detailsPersonality').textContent = bg.personality;
+                document.getElementById('detailsStrengths').textContent = bg.strengths;
+                document.getElementById('detailsWeaknesses').textContent = bg.weaknesses;
+                
+                // Apri il modal
+                detailsModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeDetails() {
+            detailsModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Ricerca in tempo reale
+        function searchBackgrounds(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                renderBackgrounds();
+                return;
+            }
+            
+            const filteredBackgrounds = backgrounds.filter(bg => 
+                bg.playerName.toLowerCase().includes(searchTerm) || 
+                bg.characterName.toLowerCase().includes(searchTerm)
+            );
+            
+            renderBackgrounds(filteredBackgrounds);
+        }
+
+        // Event Listeners
+        closeDetailsBtn.addEventListener('click', closeDetails);
+        closeDetailsBtnFooter.addEventListener('click', closeDetails);
+        searchInput.addEventListener('input', searchBackgrounds);
+
+        // Chiudi il modal dei dettagli quando si clicca fuori dal contenuto
+        detailsModal.addEventListener('click', function(e) {
+            if (e.target === detailsModal) {
+                closeDetails();
+            }
+        });
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBackgrounds();
+        });
+
+        // Fallback: se il server non supporta il listing delle directory
+        window.addEventListener('error', function(e) {
+            if (backgrounds.length === 0) {
+                showErrorMessage('Per utilizzare questa applicazione, è necessario un server che supporti il listing delle directory o implementare un file index.json che elenchi tutti i background disponibili.');
+            }
+        });
+    </script>
+</body>
+</html>
